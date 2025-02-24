@@ -38,6 +38,22 @@
   },
   {
     "ContainingType": "Employee.Controllers.EmployeesControllers",
+    "Method": "DeleteEmployee",
+    "RelativePath": "api/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Employee.Controllers.EmployeesControllers",
     "Method": "GetEmployees",
     "RelativePath": "api/employees",
     "HttpMethod": "GET",
