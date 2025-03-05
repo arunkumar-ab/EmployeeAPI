@@ -17,7 +17,6 @@ namespace Employee.Model.Entity
         public int? DepartmentId { get; set; }
         public decimal? Salary { get; set; }
 
-
     }
     [Table("Department")]
     public class Department
@@ -26,4 +25,20 @@ namespace Employee.Model.Entity
         public required int DepartmentId { get; set; }
         public required String DepName { get; set; }
     }
+
+
+    [Table("User")]
+    public class User
+    {
+        public int Id { get; set; }  // Primary Key
+        public int EmpId { get; set; }  // Foreign Key
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string Role { get; set; }
+
+        // Navigation property for the EmployeeDetails (one-to-one relationship)
+    }
+
+
+
 }
