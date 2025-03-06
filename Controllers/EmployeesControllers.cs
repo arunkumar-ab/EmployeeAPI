@@ -177,9 +177,9 @@ namespace Employee.Controllers
 
             Console.WriteLine("Request Data: " + System.Text.Json.JsonSerializer.Serialize(request));
 
-            if (double.TryParse(request.Salary.ToString(), out double salary))
+            if (decimal.TryParse(request.Salary.ToString(), out decimal salary))
             {
-                request.Salary = (decimal)salary;
+                request.Salary = salary;
             }
             else
             {
@@ -187,12 +187,20 @@ namespace Employee.Controllers
             }
             if (request == null)
                 return BadRequest(new { message = "Invalid request data" });
-            if (request.DepartmentId <= 0)
+            if (int.TryParse(request.DepartmentId.ToString(), out int depId))
+            {
+                request.DepartmentId = depId;
+            }
+            else if (request.DepartmentId <= 0)
             {
                 return BadRequest(new { message = "Invalid DepartmentId" });
             }
+            else
+            {
+                return BadRequest(new { message = "Invalid Department format" });
+            }
 
-            if (request.Salary <= 0)
+            if (request.Salary < 0)
             {
                 return BadRequest(new { message = "Salary must be a positive number" });
             }
