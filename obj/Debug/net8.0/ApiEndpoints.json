@@ -109,5 +109,21 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Employee.Controllers.EmployeesControllers",
+    "Method": "SearchEmployees",
+    "RelativePath": "api/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

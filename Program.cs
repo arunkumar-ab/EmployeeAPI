@@ -13,19 +13,19 @@ builder.Services.AddSwaggerGen();
 // Add DbContext with SQL Server connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
-
-// Add CORS policy
+//CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin", builder =>
-    {
-        builder.WithOrigins("http://localhost:5173")  // Add the React frontend URL
-               .AllowAnyHeader()
-               .AllowAnyMethod();
-    });
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyMethod()  // Allows DELETE requests
+                        .AllowAnyHeader());
 });
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");  // Apply CORS policy
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

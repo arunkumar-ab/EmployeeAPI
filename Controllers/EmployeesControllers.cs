@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Employee.Model.DTO;
 using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.Data;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
+
 
 namespace Employee.Controllers
 {
@@ -14,10 +16,12 @@ namespace Employee.Controllers
     public class EmployeesControllers : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly ILogger<EmployeesControllers> _logger;
 
-        public EmployeesControllers(ApplicationDbContext dbContext)
+        public EmployeesControllers(ApplicationDbContext dbContext, ILogger<EmployeesControllers> logger)
         {
             this.dbContext = dbContext;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -168,8 +172,31 @@ namespace Employee.Controllers
         [HttpPost("register")]
         public IActionResult RegisterUser([FromBody] RegisterUserRequest request)
         {
+            
+            _logger.LogInformation("RegisterUser Request Data: {RequestData}", JsonConvert.SerializeObject(request));
+
+            Console.WriteLine("Request Data: " + System.Text.Json.JsonSerializer.Serialize(request));
+
+            if (double.TryParse(request.Salary.ToString(), out double salary))
+            {
+                request.Salary = (decimal)salary;
+            }
+            else
+            {
+                return BadRequest(new { message = "Invalid Salary format" });
+            }
             if (request == null)
                 return BadRequest(new { message = "Invalid request data" });
+            if (request.DepartmentId <= 0)
+            {
+                return BadRequest(new { message = "Invalid DepartmentId" });
+            }
+
+            if (request.Salary <= 0)
+            {
+                return BadRequest(new { message = "Salary must be a positive number" });
+            }
+
 
             try
             {
@@ -232,7 +259,30 @@ namespace Employee.Controllers
             }
         }
 
+        [HttpGet("search")]
+        public IActionResult SearchEmployees([FromQuery] string query)
+        {
+            try
+            {
+                var searchResults = dbContext.EmployeeDetails
+                    .Where(e => e.FirstName.Contains(query) ||
+                                e.LastName.Contains(query) ||
+                                e.Email.Contains(query) ||
+                                e.JobTitle.Contains(query) ||
+                                e.DepartmentId.ToString().Contains(query))
+                    .ToList();
 
+                if (!searchResults.Any())
+                {
+                    return NotFound(new { message = "No employees match the search criteria." });
+                }
+                return Ok(searchResults);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while searching employees.", error = ex.Message });
+            }
+        }
 
         [HttpDelete("{id:int}")]
         public IActionResult DeleteEmployee(int id)
