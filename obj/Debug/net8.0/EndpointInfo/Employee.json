@@ -91,17 +91,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Update"
+                "$ref": "#/components/schemas/EmployeeCreateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Update"
+                "$ref": "#/components/schemas/EmployeeCreateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Update"
+                "$ref": "#/components/schemas/EmployeeCreateRequest"
               }
             }
           }
@@ -321,46 +321,6 @@
           },
           "role": {
             "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Update": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "hireDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "jobTitle": {
-            "type": "string",
-            "nullable": true
-          },
-          "departmentId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "salary": {
-            "type": "number",
-            "format": "double",
             "nullable": true
           }
         },

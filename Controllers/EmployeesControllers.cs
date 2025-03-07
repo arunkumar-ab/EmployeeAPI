@@ -3,10 +3,8 @@ using Employee.Data;
 using Employee.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Employee.Model.DTO;
-using System;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
 
 
 namespace Employee.Controllers
@@ -99,7 +97,7 @@ namespace Employee.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateEmployee(int id, [FromBody] Update request)
+        public IActionResult UpdateEmployee(int id, [FromBody] EmployeeCreateRequest request)
         {
             if (request == null)
             {
@@ -147,7 +145,7 @@ namespace Employee.Controllers
 
             try
             {
-                // Fetch the user by Email and Password, and include only the necessary fields (EmpId)
+                // Fetch the user by empid
                 var user = dbContext.Users
                     .FirstOrDefault(u => u.Email == request.Email && u.Password == request.Password);
 
@@ -176,6 +174,8 @@ namespace Employee.Controllers
             _logger.LogInformation("RegisterUser Request Data: {RequestData}", JsonConvert.SerializeObject(request));
 
             Console.WriteLine("Request Data: " + System.Text.Json.JsonSerializer.Serialize(request));
+            if (request == null)
+                return BadRequest(new { message = "Invalid request data" });
 
             if (decimal.TryParse(request.Salary.ToString(), out decimal salary))
             {
@@ -185,8 +185,6 @@ namespace Employee.Controllers
             {
                 return BadRequest(new { message = "Invalid Salary format" });
             }
-            if (request == null)
-                return BadRequest(new { message = "Invalid request data" });
             if (int.TryParse(request.DepartmentId.ToString(), out int depId))
             {
                 request.DepartmentId = depId;
@@ -282,7 +280,7 @@ namespace Employee.Controllers
 
                 if (!searchResults.Any())
                 {
-                    return NotFound(new { message = "No employees match the search criteria." });
+                    return NotFound(new { message = "No employees match the search." });
                 }
                 return Ok(searchResults);
             }

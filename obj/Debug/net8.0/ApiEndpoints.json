@@ -30,7 +30,7 @@
       },
       {
         "Name": "request",
-        "Type": "Employee.Model.DTO.Update",
+        "Type": "Employee.Model.DTO.EmployeeCreateRequest",
         "IsRequired": true
       }
     ],

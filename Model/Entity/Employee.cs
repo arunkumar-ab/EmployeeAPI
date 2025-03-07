@@ -36,7 +36,6 @@ namespace Employee.Model.Entity
         public string Password { get; set; }
         public string Role { get; set; }
 
-        // Navigation property for the EmployeeDetails (one-to-one relationship)
     }
 
 
